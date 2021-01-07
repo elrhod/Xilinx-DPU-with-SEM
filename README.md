@@ -1,11 +1,14 @@
-# DPU-TRD-for-ZCU104
-Create DPU hardware platform on Vivado 2020.1 and create boot image by Petalinux 2020.1
-Based on [DPU-TRD-Vivado-flow](https://github.com/Xilinx/Vitis-AI/tree/master/DPU-TRD/prj/Vivado) in Vitis-AI 1.2 version and [Vitis Custom Embedded Platform Creation Example on ZCU104](https://github.com/Xilinx/Vitis-Tutorials/blob/master/Vitis_Platform_Creation/Introduction/02-Edge-AI-ZCU104/README.md)
+# DPU-TRD-for-ZCU104 including the SEM (Sof Error Mitigation) IP.
+Based on https://github.com/luunguyen97/DPU-TRD-ZCU104 which was based on [DPU-TRD-Vivado-flow](https://github.com/Xilinx/Vitis-AI/tree/master/DPU-TRD/prj/Vivado) in Vitis-AI 1.2 version and [Vitis Custom Embedded Platform Creation Example on ZCU104](https://github.com/Xilinx/Vitis-Tutorials/blob/master/Vitis_Platform_Creation/Introduction/02-Edge-AI-ZCU104/README.md)
+## Prerequisites (tools and software installed previously and used in this flow)
+This does not mean that other versions can be used.
+- Vivado Design Suite Version 2020.1;
+- Petalinux Version 2020.2;
 ## 1. Create DPU hardware platform on Vivado 2020.1
 Set the Vivado environment:
 ```bash
 source <Vivado install path>/Vivado/2020.1/settings64.sh
-vivado
+vivado &
 ```
 Create normal project with ZCU104 board
 Add dpu_ip repository. Go to **IP Catalog**. Right click on **Vivado Repository**. Choose **Add Repository**. Choose **dpu_ip** folder.
@@ -14,7 +17,7 @@ Note:The default settings of DPU is B4096 with RAM_USAGE_LOW, CHANNEL_AUGMENTATI
  
 On Tcl conslole in Vivado, run this command to create hardware platform with 1 core DPU from tcl file [dpux1_zcu104.tcl](prj/Vivado/scripts/dpux1_zcu104.tcl).
 ```bash 
-source script/dpux1_zcu104.tcl
+source scripts/dpux1_zcu104.tcl
 ```
 For platform with 2 DPU cores, you can use this tcl [dpux2_zcu104.tcl](prj/Vivado/scripts/dpux2_zcu104.tcl).
 After executing the script, the Vivado IPI block design comes up as shown in the below figure.
