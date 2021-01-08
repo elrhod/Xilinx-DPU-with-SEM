@@ -53,7 +53,7 @@ source <path/to/petalinux-installer>/settings.sh
 2. We will use BSP of ZCU102 in the DPU-TRD tutorial to create Petalinux project for ZCU104. 
 Download ZCU102 board support package:
 ```
-source dpu_petalinux_bsp
+cd <path/of/git/cloned/folder>/DPU-TRD-ZCU104/dpu_petalinux_bsp
 ./download_bsp.sh
 ```
 3. Create petalinux project from bsp:
@@ -71,6 +71,8 @@ petalinux-config --get-hw-description=$TRD_HOME/prj/Vivado/prj/
 7. In ***Yocto settings***, change YOCTO_MACHINE_NAME from ***zcu102-zynqmp*** to ***zcu104-zynqmp***
 ## Customize Root File System, Kernel, Device Tree and U-boot
 1. Add user packages by appending the CONFIG_x lines below to the ***<your_petalinux_project_dir>/project-spec/meta-user/conf/user-rootfsconfig*** file. You can just copy this [user-rootfsconfig](ref_files/user-rootfsconfig).
+
+***OBS.: Steps 2 to 4 can be easily accomplished by loading the*** [rootfs_config](ref_files/rootfs_config). ***file by selecting load option after running*** ```petalinux-config -c rootfs```. ***If this is th case, jump to step 5 after loading the config file.***
    
 2. Run ```petalinux-config -c rootfs``` and select ***user packages***, select name of rootfs all the libraries listed above.
 
@@ -113,7 +115,7 @@ Run _petalinux-config -c kernel_ and Enable these for Linux kernel:
             			 [*]   Enable uprobes-based dynamic events
 ```
       
-b. Run _petelinux-config -c rootfs_ and enable this for root-fs:
+b. Run _petalinux-config -c rootfs_ and enable this for root-fs:
 ```
             user-packages  --->  modules   --->
           			[*]   packagegroup-petalinux-self-hosted
