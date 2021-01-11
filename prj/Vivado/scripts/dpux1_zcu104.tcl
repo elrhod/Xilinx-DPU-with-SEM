@@ -1074,3 +1074,60 @@ proc create_root_design { parentCell } {
 
 create_root_design ""
 
+###############################################################################
+### Add SEM and make connections
+###############################################################################
+# Adding SEM and peripheral blocks
+puts "Adding SEM and peripheral blocks"
+# startgroup
+# set proc_sys_reset_400m [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_400m ]
+set sem_ultra_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:sem_ultra:3.1 sem_ultra_0 ]
+set xlconstant_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_0 ]
+set xlconstant_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_1 ]
+set xlconstant_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 xlconstant_2 ]
+#make_bd_pins_external  [get_bd_pins sem_ultra_0/status_heartbeat] [get_bd_pins sem_ultra_0/status_uncorrectable] [get_bd_pins sem_ultra_0/status_essential] [get_bd_pins sem_ultra_0/status_correction] [get_bd_pins sem_ultra_0/status_observation] [get_bd_pins sem_ultra_0/status_diagnostic_scan] [get_bd_pins sem_ultra_0/status_injection] [get_bd_pins sem_ultra_0/status_classification] [get_bd_pins sem_ultra_0/status_initialization] [get_bd_pins sem_ultra_0/status_detect_only]
+set util_ds_buf_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_ds_buf:2.1 util_ds_buf_0 ]
+set xlslice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_0 ]
+# endgroup
+
+# Make property changes and connections
+puts "Making property changes and connections"
+set_property -dict [list CONFIG.MODE {mitigation_and_testing} CONFIG.CLOCK_PERIOD {100000}] [get_bd_cells sem_ultra_0]
+connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins sem_ultra_0/command_strobe]
+connect_bd_net [get_bd_pins sem_ultra_0/aux_error_cr_ne] [get_bd_pins xlconstant_0/dout]
+connect_bd_net [get_bd_pins sem_ultra_0/aux_error_cr_es] [get_bd_pins xlconstant_0/dout]
+connect_bd_net [get_bd_pins sem_ultra_0/aux_error_uc] [get_bd_pins xlconstant_0/dout]
+connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins sem_ultra_0/cap_gnt]
+set_property -dict [list CONFIG.CONST_WIDTH {44} CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_2]
+connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins sem_ultra_0/command_code]
+set_property -dict [list CONFIG.C_BUF_TYPE {BUFGCE}] [get_bd_cells util_ds_buf_0]
+connect_bd_net [get_bd_pins util_ds_buf_0/BUFGCE_I] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
+set_property -dict [list CONFIG.PSU__GPIO_EMIO__PERIPHERAL__ENABLE {1}] [get_bd_cells zynq_ultra_ps_e_0]
+set_property -dict [list CONFIG.DIN_WIDTH {95}] [get_bd_cells xlslice_0]
+connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/emio_gpio_o] [get_bd_pins xlslice_0/Din]
+connect_bd_net [get_bd_pins xlslice_0/Dout] [get_bd_pins util_ds_buf_0/BUFGCE_CE]
+connect_bd_net [get_bd_pins util_ds_buf_0/BUFGCE_O] [get_bd_pins sem_ultra_0/icap_clk]
+
+###############################################################################
+# Add UART IP and connect to SEM and Zynq
+###############################################################################
+# MAKE SURE THE IP REPO DIR HAS BEEN INCLUDED IN THE PROJECT AND IH HAS ALL THE IPS, INCLUDING THE UART IP.
+#set_property  ip_repo_paths  /ext4-files/SFU/ip_repo [current_project]
+update_ip_catalog
+set sem_ultra_2_uart_0 [ create_bd_cell -type ip -vlnv user.org:user:sem_ultra_2_uart:1.0 sem_ultra_2_uart_0 ]
+set_property -dict [list CONFIG.PSU__UART1__PERIPHERAL__IO {EMIO}] [get_bd_cells zynq_ultra_ps_e_0]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/uart_tx] [get_bd_pins zynq_ultra_ps_e_0/emio_uart1_rxd]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/uart_rx] [get_bd_pins zynq_ultra_ps_e_0/emio_uart1_txd]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_txfull] [get_bd_pins sem_ultra_0/monitor_txfull]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_rxdata] [get_bd_pins sem_ultra_0/monitor_rxdata]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_rxempty] [get_bd_pins sem_ultra_0/monitor_rxempty]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_txdata] [get_bd_pins sem_ultra_0/monitor_txdata]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_txwrite] [get_bd_pins sem_ultra_0/monitor_txwrite]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/monitor_rxread] [get_bd_pins sem_ultra_0/monitor_rxread]
+connect_bd_net [get_bd_pins sem_ultra_2_uart_0/icap_clk] [get_bd_pins util_ds_buf_0/BUFGCE_O]  
+#################################################################route_design###################
+
+
+  validate_bd_design
+  save_bd_design
+  
