@@ -17,7 +17,7 @@ Note:The default settings of DPU is B4096 with RAM_USAGE_LOW, CHANNEL_AUGMENTATI
  
 On Tcl conslole in Vivado, run this command to create hardware platform with 1 core DPU from tcl file [dpux1_zcu104.tcl](prj/Vivado/scripts/dpux1_zcu104.tcl).
 ```bash 
-source scripts/dpux1_zcu104.tcl
+source <github clone dir>/prj/Vivado/scripts/dpux1_zcu104.tcl
 ```
 For platform with 2 DPU cores, you can use this tcl [dpux2_zcu104.tcl](prj/Vivado/scripts/dpux2_zcu104.tcl).
 After executing the script, the Vivado IPI block design comes up as shown in the below figure.
