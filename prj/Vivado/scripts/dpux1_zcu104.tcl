@@ -1093,12 +1093,16 @@ set xlslice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xlslice:1.0 xlslice_
 # Make property changes and connections
 puts "Making property changes and connections"
 set_property -dict [list CONFIG.MODE {mitigation_and_testing} CONFIG.CLOCK_PERIOD {100000}] [get_bd_cells sem_ultra_0]
+set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_0]
+set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells xlconstant_1]
+set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_2]
+set_property -dict [list CONFIG.CONST_WIDTH {44} CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_2]
 connect_bd_net [get_bd_pins xlconstant_0/dout] [get_bd_pins sem_ultra_0/command_strobe]
 connect_bd_net [get_bd_pins sem_ultra_0/aux_error_cr_ne] [get_bd_pins xlconstant_0/dout]
 connect_bd_net [get_bd_pins sem_ultra_0/aux_error_cr_es] [get_bd_pins xlconstant_0/dout]
 connect_bd_net [get_bd_pins sem_ultra_0/aux_error_uc] [get_bd_pins xlconstant_0/dout]
+connect_bd_net [get_bd_pins sem_ultra_0/cap_rel] [get_bd_pins xlconstant_0/dout]
 connect_bd_net [get_bd_pins xlconstant_1/dout] [get_bd_pins sem_ultra_0/cap_gnt]
-set_property -dict [list CONFIG.CONST_WIDTH {44} CONFIG.CONST_VAL {0}] [get_bd_cells xlconstant_2]
 connect_bd_net [get_bd_pins xlconstant_2/dout] [get_bd_pins sem_ultra_0/command_code]
 set_property -dict [list CONFIG.C_BUF_TYPE {BUFGCE}] [get_bd_cells util_ds_buf_0]
 connect_bd_net [get_bd_pins util_ds_buf_0/BUFGCE_I] [get_bd_pins zynq_ultra_ps_e_0/pl_clk0]
@@ -1107,6 +1111,7 @@ set_property -dict [list CONFIG.DIN_WIDTH {95}] [get_bd_cells xlslice_0]
 connect_bd_net [get_bd_pins zynq_ultra_ps_e_0/emio_gpio_o] [get_bd_pins xlslice_0/Din]
 connect_bd_net [get_bd_pins xlslice_0/Dout] [get_bd_pins util_ds_buf_0/BUFGCE_CE]
 connect_bd_net [get_bd_pins util_ds_buf_0/BUFGCE_O] [get_bd_pins sem_ultra_0/icap_clk]
+
 
 ###############################################################################
 # Add UART IP and connect to SEM and Zynq
