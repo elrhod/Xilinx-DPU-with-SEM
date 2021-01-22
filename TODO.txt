@@ -4,3 +4,6 @@ cat  /proc/tty/driver/xuartps
 stty -F /dev/ttyPS1 -a
 # configure 115200 baud, 8bits, not parity, 1 stopbit, utf-8 encoding
 stty -F /dev/ttyPS1 115200 cs8 -parenb -cstopb iutf8
+cat /dev/ttyPS1
+
+# check XAPP1298 
