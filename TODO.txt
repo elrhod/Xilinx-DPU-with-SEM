@@ -1,0 +1,6 @@
+# check uart base address, tx, rx irq and others
+cat  /proc/tty/driver/xuartps
+# check specific uart, uart1 in this case
+stty -F /dev/ttyPS1 -a
+# configure 115200 baud, 8bits, not parity, 1 stopbit, utf-8 encoding
+stty -F /dev/ttyPS1 115200 cs8 -parenb -cstopb iutf8
