@@ -7,3 +7,14 @@ stty -F /dev/ttyPS1 115200 cs8 -parenb -cstopb iutf8
 cat /dev/ttyPS1
 
 # check XAPP1298 
+
+/*
+* "However, while the PS and PCAP are in control of the configuration logic, the PL and ICAP
+* are locked out of the configuration logic. For the SEM controller to function, configuration
+* logic access must be transferred to the ICAP. This is accomplished by clearing the pcap_pr
+* (Bit[0]) in the PS CSU pcap_ctrl register (pcap_ctrl, address 0xFFCA3008). To confirm
+* that the SEM controller has access to the configuration logic, ICAP_AVAIL can be monitored.
+* If ICAP_AVAIL = 0, a higher priority master such as MCAP, PCAP, or JTAG has control of the
+* configuration logic. If ICAP_AVAIL = 1, the SEM controller has access to the configuration"
+*/
+
