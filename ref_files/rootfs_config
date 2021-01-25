@@ -4268,3 +4268,9 @@ CONFIG_opencl-headers-dev=y
 #
 CONFIG_ROOTFS_ROOT_PASSWD="root"
 CONFIG_ADD_EXTRA_USERS="petalinux:petalinux;"
+
+#
+# PSUART Kernel Configuration
+#
+CONFIG_SERIAL_XILINX_PS_UART=y
+CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
