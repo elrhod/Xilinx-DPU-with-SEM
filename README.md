@@ -102,16 +102,21 @@ petalinux-config --get-hw-description=$TRD_HOME/prj/Vivado/prj/
    - ***CPU Power Mangement > CPU Idle > CPU idle PM support***
    - ***CPU Power Management > CPU Frequency scaling > CPU Frequency scaling***
    c) Exit and Save.
+   
 6. Remove PMUFW generation from petalinux. 
    In order to the SEM have access to the ICAP, user needs to be able to clear bit 0 of the PCAP_CTRL register. CSU and PMU global registers are classified to two lists. White list (accessed all the time by default), Black list (accessed when a compile time flag is set). As the PCAP_CTRL registes is part of the black list, user needs to build the PMUFW with SECURE_ACCESS_VAL flag set. There is a #define option (SECURE_ACCESS_VAL) at the xpfw_config.h file that provides access to black list. user needs to generate the PMUPW in a separated step, which will be presented in a following section. 
+   
    For now, lets disable the PMUFW generation by petalinux.
    
    a) Launch top level system settings configuration menu and configure:
 ```
 $ petalinux-config
 ```
+
    b) Select **Linux Components** Selection.
+   
    c) Deselect PMU Firmware option.
+   
 ```
 [ ] PMU Firmware
 ```   
@@ -138,7 +143,9 @@ c. Run _petalinux-build_ and update kernel and rootfs. This step may take some h
 
 8. Build PMUFW using Vitis. 
 Follow the steps presented in the following link to generate the pmufw.elf file.
+
 https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841724/PMU+Firmware
+
 Take note of the output location. It should be in a folder called zynqmp_pmufw inside the platform directory folder tree.
 
 9. Update the Device tree.
